@@ -1,35 +1,13 @@
 var Hapi = require('hapi');
-var Boom = require('boom');
+//var _ = require('lodash');
 
 var server = new Hapi.Server();
 server.connection({port: 3000});
 
-var quotes = [
-    'I\'ll be back -- Terminator',
-    'Faithless is he that says farewell when the road darkens. -- JRR Tolkien',
-    'Not all those who wander are lost. -- JRR Tolkien'
-];
+var routes = require('./routes');
 
-server.route({
-    method: 'GET',
-    path: '/quote/{id}',
-    handler: function (req, reply) {
-        console.log('Hit on /quote/' + req.params.id);
-
-        if (quotes.length <= req.params.id) {
-            return reply(Boom.notFound('Unknown quote.'));
-        }
-        reply(quotes[req.params.id]);
-    }
-});
-
-server.route({
-    method: 'GET',
-    path: '/quotes/random',
-    handler: function (req, reply) {
-        console.log('Hit on /quotes/random');
-        reply(quotes[Math.random() * quotes.length | 0]);
-    }
-});
+for (var i = 0; i < routes.length; i++) {
+    server.route(routes[i]);
+}
 
 module.exports = server;

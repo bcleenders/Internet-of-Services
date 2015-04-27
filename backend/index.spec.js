@@ -14,7 +14,7 @@ var server = require('./server');
 
 describe('Simple server', function () {
 
-    before(function(done) {
+    before(function (done) {
         server.start();
         done();
     });
@@ -33,7 +33,22 @@ describe('Simple server', function () {
             }
         }, function (res) {
             expect(res.statusCode).to.equal(200);
-            
+            expect(res.result).to.equal('I\'ll be back -- Terminator');
+
+            done();
+        });
+    });
+
+    it('Should return a 404 for non-existing queries', function (done) {
+        server.inject({
+            method: 'GET',
+            url: '/quote/10000000',
+            headers: {
+                // Optional...
+            }
+        }, function (res) {
+            expect(res.statusCode).to.equal(404);
+
             done();
         });
     });
