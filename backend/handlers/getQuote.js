@@ -1,14 +1,17 @@
 var Boom = require('boom');
-var Quote = require('../models/quote');
 
 var handle = function (req, reply) {
-    var quote = Quote.get(req.params.id);
+    var Quote = req.server.plugins['hapi-mongo-models'].Quote;
 
-    if (quote) {
-        reply(quote);
-    } else {
-        reply(Boom.notFound('Unknown quote.'));
-    }
+    var quote = Quote.findById(req.params.id, function(err, result) {
+        if(err) {
+            reply(Boom.badImplementation('Error looking up quote.'));
+        } else if (result.length === 0) {
+            reply(Boom.notFound('Could not find quote with this id.'));
+        }else {
+            reply(result);
+        }
+    });
 };
 
 module.exports = {

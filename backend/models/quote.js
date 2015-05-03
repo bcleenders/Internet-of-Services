@@ -1,20 +1,23 @@
-var quotes = [
-    'Faithless is he that says farewell when the road darkens. -- JRR Tolkien',
-    'I\'ll be back -- Terminator',
-    'Not all those who wander are lost. -- JRR Tolkien'
-];
+var Joi = require('joi');
+var ObjectAssign = require('object-assign');
+var BaseModel = require('hapi-mongo-models').BaseModel;
 
-var get = function (id) {
-    if (0 <= id && id <= quotes.length) {
-        return quotes[id];
-    }
+var Quote = BaseModel.extend({
+	// instance prototype
+	constructor: function (attrs) {
+
+		ObjectAssign(this, attrs);
+	}
+});
+
+Quote._collection = 'quote'; // the mongo collection name
+
+Quote.schema = Joi.object().keys({
+	text: Joi.string().required()
+});
+
+Quote.staticFunction = function () {
+	// static class function
 };
 
-var count = function () {
-    return quotes.length;
-};
-
-module.exports = {
-    get: get,
-    count: count
-};
+module.exports = Quote;
