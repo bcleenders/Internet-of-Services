@@ -1,6 +1,8 @@
 language: node_js
 node_js:
   - 0.12.2
+services:
+  - mongodb
 env:
   - TEST_DIR=backend
 script: cd $TEST_DIR && npm install && gulp test

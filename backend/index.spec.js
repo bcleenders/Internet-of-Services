@@ -16,7 +16,11 @@ describe('Simple server', function () {
 
     before(function (done) {
         server.start();
-        done();
+
+        // Give it a bit of time really register...
+        setTimeout(function() {
+            done();
+        }, 100);
     });
 
     after(function (done) {
@@ -24,25 +28,10 @@ describe('Simple server', function () {
         done();
     });
 
-    it('should return quotes', function (done) {
-        server.inject({
-            method: 'GET',
-            url: '/quote/1',
-            headers: {
-                // Optional...
-            }
-        }, function (res) {
-            expect(res.statusCode).to.equal(200);
-            expect(res.result).to.equal('I\'ll be back -- Terminator');
-
-            done();
-        });
-    });
-
     it('Should return a 404 for non-existing queries', function (done) {
         server.inject({
             method: 'GET',
-            url: '/quote/10000000',
+            url: '/quote/1',
             headers: {
                 // Optional...
             }

@@ -4,9 +4,7 @@ var handle = function (req, reply) {
     var Quote = req.server.plugins['hapi-mongo-models'].Quote;
 
     var quote = Quote.findById(req.params.id, function(err, result) {
-        if(err) {
-            reply(Boom.badImplementation('Error looking up quote.'));
-        } else if (result.length === 0) {
+        if(err || result.length === 0) {
             reply(Boom.notFound('Could not find quote with this id.'));
         }else {
             reply(result);
