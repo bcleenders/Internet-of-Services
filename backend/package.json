@@ -17,6 +17,7 @@
     "lab": "^5.6.1",
     "mongodb": "^2.0.28",
     "object-assign": "^2.0.0",
+    "passport": "^0.2.1",
     "require-dir": "^0.3.0",
     "serve-static": "^1.9.2"
   },

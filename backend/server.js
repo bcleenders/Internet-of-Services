@@ -37,4 +37,11 @@ for (var i = 0; i < routes.length; i++) {
     server.route(routes[i]);
 }
 
+
+server.register(require('./plugins/passportSAML'), function (err) {
+    if (err) {
+        console.log('Failed loading HapiMongoModels plugin: ' + err.toString());
+    }
+});
+
 module.exports = server;
