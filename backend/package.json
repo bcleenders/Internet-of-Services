@@ -12,10 +12,12 @@
     "gulp-nodemon": "~2.0.2",
     "hapi": "~8.0.0",
     "hapi-mongo-models": "^2.1.1",
+    "hapi-passport": "0.0.5",
     "joi": "^6.4.1",
     "lab": "^5.6.1",
     "mongodb": "^2.0.28",
     "object-assign": "^2.0.0",
+    "passport-saml": "^0.9.2",
     "require-dir": "^0.3.0",
     "serve-static": "^1.9.2"
   },
