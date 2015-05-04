@@ -1,6 +1,6 @@
 var Hapi = require('hapi');
 var HapiMongoModels = require('hapi-mongo-models');
-
+var config = require('config');
 var server = new Hapi.Server();
 
 // Load all models
@@ -8,7 +8,7 @@ var plugin = {
     register: HapiMongoModels,
     options: {
         mongodb: {
-            url: 'mongodb://localhost:27017/hapi-mongo-models-test',
+            url: "mongodb://" + config.get("dbConfig.host") + ":" + config.get("dbConfig.port") + "/" + config.get("dbConfig.dbName"),
             options: {}
         },
         autoIndex: false,
@@ -31,7 +31,6 @@ server.connection({
 
 // Load the routes
 var routes = require('./routes');
-
 // Register the routes to the server
 for (var i = 0; i < routes.length; i++) {
     console.log('Registered [' + routes[i].method + '] ' + routes[i].path);
