@@ -28,6 +28,5 @@ for (var i = 0; i < files.length; i++) {
         }
     });
 }
-debugger
 
 module.exports = server;
