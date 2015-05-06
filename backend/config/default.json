@@ -1,7 +1,15 @@
 {
+  "httpSever": {
+    "port": 3000
+  },
   "dbConfig": {
     "host": "localhost",
     "port": 27017,
     "dbName": "hapi-mongo-models"
-  }
+  },
+  "saml": {
+      "path": "/login/callback",
+      "protocol": "http",
+      "entryPoint": ""
+    }
 }

@@ -12,6 +12,7 @@
     "gulp-lab": "~1.0.5",
     "gulp-nodemon": "~2.0.2",
     "hapi": "~8.0.0",
+    "hapi-auth-saml": "git://github.com/pebblecode/hapi-auth-saml.git",
     "hapi-mongo-models": "^2.1.1",
     "joi": "^6.4.1",
     "lab": "^5.6.1",
