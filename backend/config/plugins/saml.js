@@ -8,8 +8,19 @@ exports.register = function (server, options, next) {
   options.verifyFunc = function(profile, done) {
     // Implement Callback once authenticated
     // The object returned in the done function will be displayed in the result
+    console.log('Userinfo: ');
+    console.log({
+      email: profile.email,
+      username: profile.uid
+    });
+
+    //request.auth.session.set({
+    //  email: profile.email,
+    //  username: profile.uid
+    //});
+
     return done(null, {email: profile.email, username: profile.uid});
-  }
+  };
 
   server.register({register: SamlAuth, options: options}, function (err) {
     if (err) {
@@ -23,7 +34,7 @@ exports.register = function (server, options, next) {
       config: {
         auth: 'samlAuth',
         handler: function(request, reply) {
-          reply(request.auth);
+          reply.redirect('/');
         }
       }
     });
