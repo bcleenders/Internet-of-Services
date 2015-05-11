@@ -8,6 +8,11 @@ var routes = [
         method: 'POST',
         path: '/quote',
         handler: require('./handlers/postQuote').handle
+    },
+    {
+        method: 'GET',
+        path: '/login/saml',
+        handler: require('./handlers/authentication')
     }
 ];
 
