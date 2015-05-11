@@ -8,6 +8,7 @@ var fs = require('fs');
 server.connection({
     port: config.get("httpSever.port")
 });
+
 // Load the routes
 var routes = require('./routes');
 // Register the routes to the server
@@ -15,6 +16,7 @@ for (var i = 0; i < routes.length; i++) {
     console.log('Registered [' + routes[i].method + '] ' + routes[i].path);
     server.route(routes[i]);
 }
+
 // Load the plugins
 var pluginPath = "./config/plugins"
 var files = fs.readdirSync(pluginPath);
