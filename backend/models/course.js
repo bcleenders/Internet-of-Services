@@ -1,3 +1,6 @@
-/**
- * Created by bramleenders on 11/05/15.
- */
+module.exports = function(bookshelf) {
+	var Model = bookshelf.Model.extend({
+		tableName: 'courses'
+	})
+	return Model;
+};

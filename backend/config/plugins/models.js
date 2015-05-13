@@ -1,15 +1,20 @@
 var config = require('config');
-var waterline = require('waterline');
 
 var knex = require('knex')({
-    client: 'mysql',
-    connection: {
-        host     : '127.0.0.1',
-        user     : 'your_database_user',
-        password : 'your_database_password',
-        database : 'myapp_test',
-        charset  : 'utf8'
-    }
+  client: config.get("dbConfig.client"),
+  connection: {
+    database : config.get("dbConfig.database"),
+    user     : config.get("dbConfig.user"),
+    password : config.get("dbConfig.password")
+  },
+  pool: {
+    min: config.get("dbConfig.poolMin"),
+    max: config.get("dbConfig.poolMax")
+  },
+  migrations: {
+    tableName: config.get("dbConfig.migrationsTableName")
+  },
+  debug: config.get("dbConfig.debug")
 });
 
 var bookshelf = require('bookshelf')(knex);
@@ -20,13 +25,11 @@ var User = bookshelf.Model.extend({
 
 exports.register = function (server, options, next) {
 
-    var modelDefinitions = require('../../models');
+    var models = require('../../models');
 
-    modelDefinitions.forEach(function(modelDef, name) {
-        var modelName = name.toLowerCase();
-
-        model = modelDef(bookshelf);
-    });
+    for(var name in models) {
+        var model = models[name](bookshelf);
+    }
 
     next();
 };
