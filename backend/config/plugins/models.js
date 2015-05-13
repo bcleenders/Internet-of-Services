@@ -19,22 +19,26 @@ var knex = require('knex')({
 
 var bookshelf = require('bookshelf')(knex);
 
-var User = bookshelf.Model.extend({
-    tableName: 'users'
-});
-
 exports.register = function (server, options, next) {
 
-    var models = require('../../models');
+    // These are the files containing our model definitions
+    var modelDefinitions = require('../../models');
 
-    for(var name in models) {
-        var model = models[name](bookshelf);
+    // These are the "instantiated" models -> use these for querying etc.
+    var models = {};
+
+    // Loop over all model definitions, initialize them with bookshelf and add them to the models object
+    for(var name in modelDefinitions) {
+        models[name.toLowerCase()] = modelDefinitions[name](bookshelf);
     }
+
+    // Allow accessing the models through server.plugins.models.<modelname, i.e. 'user'>
+    server.expose(models);
 
     next();
 };
 
 exports.register.attributes = {
-    name: 'IOSModels',
+    name: 'models',
     version: '0.0.1'
 };
