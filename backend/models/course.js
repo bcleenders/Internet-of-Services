@@ -5,8 +5,8 @@ module.exports = function(bookshelf) {
 		// Get all users in this course
 		users: function() {
 			var User = server.plugins.models.user;
-			var UserCourse = server.plugins.models.usercourse;
-			return this.belongsToMany(User).through(UserCourse);
+			var CourseUser = server.plugins.models.courseuser;
+			return this.belongsToMany(User).through(CourseUser);
 		}
 	});
 

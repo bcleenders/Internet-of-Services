@@ -15,7 +15,8 @@ module.exports = {
     },
     migrations: {
       tableName: config.get("dbConfig.migrationsTableName")
-    }
+    },
+    debug: true
   },
 
   staging: {

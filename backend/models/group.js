@@ -5,8 +5,8 @@ module.exports = function(bookshelf) {
 		// Get all users in this group
 		users: function() {
 			var User = server.plugins.models.user;
-			var UserGroup = server.plugins.models.usergroup;
-			return this.belongsToMany(User).through(UserGroup);
+			var GroupUser = server.plugins.models.groupuser;
+			return this.belongsToMany(User).through(GroupUser);
 		}
 	});
 

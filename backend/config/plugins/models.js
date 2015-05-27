@@ -21,11 +21,6 @@ var bookshelf = require('bookshelf')(knex);
 
 exports.register = function (server, options, next) {
 
-    // Perform migrations (intermediate solution)
-    require('../../migrations').latest(knex, function() {
-        console.log('Finished migrations.');
-    });
-
     // These are the files containing our model definitions
     var modelDefinitions = require('../../models');
 
