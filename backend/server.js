@@ -3,11 +3,31 @@ var config = require('config');
 var server = new Hapi.Server();
 var saml = require('./config/plugins/saml')
 var fs = require('fs');
+var path = require('path');
 
 // Set some server stuff
 server.connection({
     port: config.get("httpSever.port")
 });
+
+// Setup the view engine
+server.views({
+    engines: {
+        html: require('handlebars')
+    },
+    path: path.join(__dirname, 'public/templates')
+});
+
+// Serve static files (css and js)
+server.route({
+    method: 'GET',
+    path: '/static/{param*}',
+    handler: {
+        directory: {
+            path: 'public/static'
+        }
+    }
+})
 
 // Load the routes
 var routes = require('./routes');
