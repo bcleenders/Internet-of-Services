@@ -1,6 +1,7 @@
 module.exports = function(bookshelf) {
 	var Model = bookshelf.Model.extend({
 		tableName: 'courses',
+		hasTimestamps: true,
 
 		// Get all users in this course
 		users: function() {

@@ -1,6 +1,7 @@
 module.exports = function(bookshelf) {
 	var Model = bookshelf.Model.extend({
 		tableName: 'groups',
+		hasTimestamps: true,
 
 		// Get all users in this group
 		users: function() {
