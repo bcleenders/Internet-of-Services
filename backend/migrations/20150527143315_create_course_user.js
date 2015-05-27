@@ -2,8 +2,9 @@
 
 exports.up = function(knex) {
     return knex.schema.createTable('course_user', function(table) {
-        table.integer('course_id').unique().references('id');
-        table.integer('user_id').unique().references('id');
+        table.integer('course_id').notNullable().references('id').inTable("courses");
+        table.integer('user_id').notNullable().references('id').inTable("users");
+        table.unique(['course_id', 'user_id']);
         table.timestamps();
     });
 };

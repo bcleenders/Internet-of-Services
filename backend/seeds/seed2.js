@@ -2,44 +2,19 @@ server = {expose:function(models){this.plugins = {models: models}}}
 var models = require('./../config/plugins/models')
 exports.seed = function(knex, Promise) {
   models.register(server, {}, function(){})
-  var users = [];
-  var groups = [];
-  var courses = [];
-  var groupuser = [];
-  var courseuser = [];
-  var userId;
-  var courseId;
-  var groupId;
-
-  for (var i = 1; i <= 10; i++) {
-    users << new server.plugins.models.user({name: 'User ' + i}).save();
-  }
-  for (var i = 1; i <= 10; i++) {
-    groups << new server.plugins.models.group({name: 'Group ' + i}).save();
-  }
-  for (var i = 1; i <= 10; i++) {
-    courses << new server.plugins.models.course({name: 'Course ' + i}).save();
-  }
 
   return Promise.join(
     // Deletes ALL existing entries
-    knex('users').del(),
-    knex('groups').del(),
-    knex('courses').del(),
+
     knex('group_user').del(),
     knex('course_user').del(),
 
     // Inserts seed entries
-    users,
-
     new server.plugins.models.user().fetch().then(function(user) {
-      console.log('***')
+      console.log("***")
       userId = user.id;
-      console.log("User id:" + userId)
+      console.log("User id:" + user.id)
     }),
-
-    groups,
-
     new server.plugins.models.group().fetch().then(function(group) {
       groupId = group.id;
 
@@ -54,8 +29,6 @@ exports.seed = function(knex, Promise) {
                           new server.plugins.models.groupuser({group_id: groupId + 8, user_id: userId + 8}).save(),
                           new server.plugins.models.groupuser({group_id: groupId + 9, user_id: userId + 9}).save()])
     }),
-
-    courses,
 
     new server.plugins.models.course().fetch().then(function(course) {
 

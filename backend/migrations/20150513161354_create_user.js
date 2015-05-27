@@ -4,8 +4,8 @@ exports.up = function(knex) {
   return knex.schema.createTable('users', function(table) {
     table.increments('id').primary();
     table.string('name');
-    table.string('email');
-    table.boolean('teacher');
+    table.string('email').notNullable();
+    table.boolean('teacher').notNullable().defaultTo(false);
     table.timestamps();
   });
 };
