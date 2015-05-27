@@ -9,5 +9,6 @@ module.exports = function(bookshelf) {
 			return this.belongsToMany(User).through(UserGroup);
 		}
 	});
+
 	return Model;
 };

@@ -1,13 +1,13 @@
 var routes = [
     {
         method: 'GET',
-        path: '/quote/{id}',
-        handler: require('./handlers/getQuote').handle
+        path: '/user/{id}',
+        handler: require('./handlers/getUser').handle
     },
     {
         method: 'POST',
-        path: '/quote',
-        handler: require('./handlers/postQuote').handle
+        path: '/user',
+        handler: require('./handlers/postUser').handle
     }
 ];
 
