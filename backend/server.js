@@ -15,7 +15,8 @@ server.views({
     engines: {
         html: require('handlebars')
     },
-    path: path.join(__dirname, 'public/templates')
+    path: path.join(__dirname, 'public/templates'),
+    partialsPath: path.join(__dirname, 'public/templates/partials')
 });
 
 // Serve static files (css and js)
