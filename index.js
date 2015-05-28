@@ -1,3 +1,5 @@
-var backend = require('./backend/server');
+var server = require('./server');
 
-backend.start();
+server.start(function() {
+    console.log('Server running at:', server.info.uri);
+});
