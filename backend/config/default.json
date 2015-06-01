@@ -11,7 +11,8 @@
     "charset"             : "utf8",
     "migrationsTableName" : "migrations",
     "poolMin"             : 2,
-    "poolMax"             : 10
+    "poolMax"             : 10,
+    "debug"               : false
   },
   "saml": {
       "path": "/login/callback",
