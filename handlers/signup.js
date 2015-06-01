@@ -27,22 +27,28 @@ var handle = function (req, reply) {
         model.fetch()
     };
 
-    //Promise.join([
-    //    //new models.user(userData).findOrCreate({email: userData.email}),
-    //    ,
-    //    new models.course(courseData).save({isis_id: courseData.isis_id})
-    //])
+    Promise.join([
+        new models.user().where({email: userData.email}).fetch({required: true}).then(function(user) {
+                if(user === null) {
+                    return new models.user(userData).save();
+                } else {
+                    return user;
+                }
+            }),
+        new models.course().where({isis_id: courseData.isis_id}).fetch({required: true}).then(function(course) {
+                if(course === null) {
+                    return new models.course(courseData).save();
+                } else {
+                    return course;
+                }
+            })
+    ]).then(function(result) {
 
-    new models.user().where({email: userData.email}).fetch({required: true})
-    .then(function(user) {
-        if(user === null) {
-            return new models.user(userData).save();
-        } else {
-            return user;
-        }
-    }).then(function(user) {
+        //result[0][0].get('name').then(function(name) {
+        //    console.log("Received user: " + name);
+        //});
+
         reply('Hello, world!');
-        debugger;
     });
 };
 

@@ -19,12 +19,6 @@ var knex = require('knex')({
 
 var bookshelf = require('bookshelf')(knex);
 
-//bookshelf.Model.prototype.findOrCreate = function(options) {
-//    var cloned = this.clone();
-//    debugger;
-//    return
-//};
-
 exports.register = function (server, options, next) {
 
     // These are the files containing our model definitions
