@@ -1,5 +1,6 @@
 var Boom = require('boom');
 var Promise = require('bluebird');
+var _ = require('lodash');
 
 var handle = function (req, reply) {
     // TODO: verify signature!
@@ -22,18 +23,26 @@ var handle = function (req, reply) {
         teacher: (req.payload.roles === 'Instructor')
     };
 
-    Promise.join([
-        new models.user(userData).save(),
-        new models.course(courseData).save()
-    ]).then(function (u, c) {
-        console.log(u);
+    var upsert = function(model, data) {
+        model.fetch()
+    };
 
+    //Promise.join([
+    //    //new models.user(userData).findOrCreate({email: userData.email}),
+    //    ,
+    //    new models.course(courseData).save({isis_id: courseData.isis_id})
+    //])
+
+    new models.user().where({email: userData.email}).fetch({required: true})
+    .then(function(user) {
+        if(user === null) {
+            return new models.user(userData).save();
+        } else {
+            return user;
+        }
+    }).then(function(user) {
+        reply('Hello, world!');
         debugger;
-
-        reply('Hello ' + userData.name + '!');
-
-    }).catch(function (err) {
-        console.error(err);
     });
 };
 
