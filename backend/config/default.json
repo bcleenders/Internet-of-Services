@@ -1,5 +1,5 @@
 {
-  "httpSever": {
+  "httpServer": {
     "port": 3000
   },
   "dbConfig": {
@@ -14,8 +14,12 @@
     "poolMax"             : 10
   },
   "saml": {
-      "path": "/login/callback",
-      "protocol": "http",
-      "entryPoint": ""
-    }
+    "path": "/login/callback",
+    "protocol": "http",
+    "entryPoint": ""
+  },
+  "cookieAuth": {
+    "secret": "",
+    "name": "Internet of Services"
+  }
 }

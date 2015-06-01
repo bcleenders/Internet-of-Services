@@ -6,16 +6,8 @@ var fs = require('fs');
 
 // Set some server stuff
 server.connection({
-    port: config.get("httpSever.port")
+    port: config.get("httpServer.port")
 });
-
-// Load the routes
-var routes = require('./routes');
-// Register the routes to the server
-for (var i = 0; i < routes.length; i++) {
-    console.log('Registered [' + routes[i].method + '] ' + routes[i].path);
-    server.route(routes[i]);
-}
 
 // Load the plugins
 var plugins = require('./config/plugins');
@@ -26,6 +18,14 @@ for(var name in plugins) {
             console.log('Failed loading ' + name + ' plugin: ' + err.toString());
         }
     });
+}
+
+// Load the routes
+var routes = require('./routes');
+// Register the routes to the server
+for (var i = 0; i < routes.length; i++) {
+    server.route(routes[i]);
+    console.log('Registered [' + routes[i].method + '] ' + routes[i].path);
 }
 
 module.exports = server;
