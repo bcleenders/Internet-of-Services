@@ -5,6 +5,7 @@ exports.up = function(knex) {
         table.integer('course_id').notNullable().references('id').inTable("courses");
         table.integer('user_id').notNullable().references('id').inTable("users");
         table.unique(['course_id', 'user_id']);
+        table.boolean('teacher').notNullable().defaultTo(false);
         table.timestamps();
     });
 };

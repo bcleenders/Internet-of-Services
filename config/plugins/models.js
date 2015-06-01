@@ -25,7 +25,9 @@ exports.register = function (server, options, next) {
     var modelDefinitions = require('../../models');
 
     // These are the "instantiated" models -> use these for querying etc.
-    var models = {};
+    var models = {
+        _bookshelf: bookshelf
+    };
 
     // Loop over all model definitions, initialize them with bookshelf and add them to the models object
     for(var name in modelDefinitions) {

@@ -8,8 +8,7 @@ module.exports = function(bookshelf) {
 		// Validation rules
 		validations: {
 			name: 'required',
-			email: ['required', 'email'],
-			teacher: 'boolean'
+			email: ['required', 'email']
 		},
 
 		// Overwrite initialize function to call validate method
