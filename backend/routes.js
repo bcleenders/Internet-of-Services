@@ -8,6 +8,15 @@ var routes = [
         method: 'POST',
         path: '/user',
         handler: require('./handlers/postUser').handle
+    },
+    {
+        method: ['POST'],
+        path: '/isis',
+        handler: function(req, reply) {
+            console.log(req.payload);
+            
+            reply("Hello world!");
+        }
     }
 ];
 
