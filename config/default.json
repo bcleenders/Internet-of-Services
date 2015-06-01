@@ -1,0 +1,21 @@
+{
+  "httpSever": {
+    "port": 3000
+  },
+  "dbConfig": {
+    "client"              : "postgresql",
+    "host"                : "localhost",
+    "user"                : "",
+    "password"            : "",
+    "database"            : "",
+    "charset"             : "utf8",
+    "migrationsTableName" : "migrations",
+    "poolMin"             : 2,
+    "poolMax"             : 10
+  },
+  "saml": {
+      "path": "/login/callback",
+      "protocol": "http",
+      "entryPoint": ""
+    }
+}
