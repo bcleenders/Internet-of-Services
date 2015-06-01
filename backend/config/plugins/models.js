@@ -1,37 +1,44 @@
 var config = require('config');
-var waterline = require('waterline');
 
 var knex = require('knex')({
-    client: 'mysql',
-    connection: {
-        host     : '127.0.0.1',
-        user     : 'your_database_user',
-        password : 'your_database_password',
-        database : 'myapp_test',
-        charset  : 'utf8'
-    }
+  client: config.get("dbConfig.client"),
+  connection: {
+    database : config.get("dbConfig.database"),
+    user     : config.get("dbConfig.user"),
+    password : config.get("dbConfig.password")
+  },
+  pool: {
+    min: config.get("dbConfig.poolMin"),
+    max: config.get("dbConfig.poolMax")
+  },
+  migrations: {
+    tableName: config.get("dbConfig.migrationsTableName")
+  },
+  debug: config.get("dbConfig.debug")
 });
 
 var bookshelf = require('bookshelf')(knex);
 
-var User = bookshelf.Model.extend({
-    tableName: 'users'
-});
-
 exports.register = function (server, options, next) {
 
+    // These are the files containing our model definitions
     var modelDefinitions = require('../../models');
 
-    modelDefinitions.forEach(function(modelDef, name) {
-        var modelName = name.toLowerCase();
+    // These are the "instantiated" models -> use these for querying etc.
+    var models = {};
 
-        model = modelDef(bookshelf);
-    });
+    // Loop over all model definitions, initialize them with bookshelf and add them to the models object
+    for(var name in modelDefinitions) {
+        models[name.toLowerCase()] = modelDefinitions[name](bookshelf);
+    }
+
+    // Allow accessing the models through server.plugins.models.<modelname, i.e. 'user'>
+    server.expose(models);
 
     next();
 };
 
 exports.register.attributes = {
-    name: 'IOSModels',
+    name: 'models',
     version: '0.0.1'
 };

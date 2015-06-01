@@ -1,26 +1,33 @@
-var Joi = require('joi');
-var ObjectAssign = require('object-assign');
-var BaseModel = require('hapi-mongo-models').BaseModel;
+var checkit  = require('checkit');
 
-var Quote = BaseModel.extend({
-    // instance prototype
-    constructor: function (attrs) {
+module.exports = function(bookshelf) {
+	var Model = bookshelf.Model.extend({
+		tableName: 'groups',
+		hasTimestamps: true,
 
-        ObjectAssign(this, attrs);
-    }
-});
+		// Validation rules
+		validations: {
+		  name: 'required',
+			waitingList: 'boolean'
+		},
 
-Quote._collection = 'group'; // the mongo collection name
+		// Overwrite initialize function to call validate method
+		initialize: function() {
+	    this.on('saving', this.validate.bind(this));
+	  },
 
-Quote.schema = Joi.object().keys({
-    name: Joi.string().required(),
-    description: Joi.string().required(),
-    owner: Joi().string().required(),
-    members: Joi.array().items(Joi.string())
-});
+		// Validate function will check validation rules
+		validate: function() {
+	    return new checkit(this.validations).run(this.attributes);
+	  },
 
-Quote.staticFunction = function () {
-    // static class function
+		// Get all users in this group
+		users: function() {
+			var User = server.plugins.models.user;
+			var GroupUser = server.plugins.models.groupuser;
+			return this.belongsToMany(User).through(GroupUser);
+		}
+	});
+
+	return Model;
 };
-
-module.exports = Quote;
