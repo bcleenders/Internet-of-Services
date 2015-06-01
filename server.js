@@ -44,7 +44,8 @@ for (var i = 0; i < routes.length; i++) {
 var plugins = require('./config/plugins');
 for(var name in plugins) {
     console.log('Registered ' + name + " plugin");
-    server.register(plugins[name], function (err) {
+    var plug = plugins[name].options ? {register: plugins[name].register, options: plugins[name].options} : plugins[name];
+    server.register(plug, function (err) {
         if (err) {
             console.log('Failed loading ' + name + ' plugin: ' + err.toString());
         }
