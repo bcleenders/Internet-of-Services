@@ -7,27 +7,32 @@ var handle = function (req, reply) {
     var models = req.server.plugins.models;
 
     var courseData = {
-        id: req.payload.context_id,
-        name: req.payload.context_title
+        isis_id: req.payload.context_id,
+        name: req.payload.context_title,
+        year: 2000,
+        semester: 'SS'
     };
-
-    //        teacher: (req.payload.roles === 'Instructor')
-
 
     var userData = {
         name: req.payload.lis_person_name_full,
         email: req.payload.lis_person_contact_email_primary
     };
 
-    models._bookshelf.transaction(function(t) {
-        // Save user to database
-        return new models.user(userData).save(null, {transacting: t});
+    var course_userData = {
+        teacher: (req.payload.roles === 'Instructor')
+    };
 
-    }).then(function(u) {
+    Promise.join([
+        new models.user(userData).save(),
+        new models.course(courseData).save()
+    ]).then(function (u, c) {
         console.log(u);
+
+        debugger;
+
         reply('Hello ' + userData.name + '!');
 
-    }).catch(function(err) {
+    }).catch(function (err) {
         console.error(err);
     });
 };

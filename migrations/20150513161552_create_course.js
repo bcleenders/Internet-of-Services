@@ -6,6 +6,7 @@ exports.up = function(knex) {
     table.string('name');
     table.string('semester');
     table.integer('year');
+    table.integer('isis_id');
     table.timestamps();
   });
 };

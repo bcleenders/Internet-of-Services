@@ -7,6 +7,7 @@ module.exports = function (bookshelf) {
 
         // Validation rules
         validations: {
+            isis_id: ['required', 'numeric'],
             name: 'required',
             semester: 'required',
             year: ['required', 'numeric']
