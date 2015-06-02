@@ -19,36 +19,41 @@ var handle = function (req, reply) {
         email: req.payload.lis_person_contact_email_primary
     };
 
-    var course_userData = {
-        teacher: (req.payload.roles === 'Instructor')
-    };
-
     var upsert = function(model, data) {
         model.fetch()
     };
 
-    Promise.join([
-        new models.user().where({email: userData.email}).fetch({required: true}).then(function(user) {
-                if(user === null) {
-                    return new models.user(userData).save();
-                } else {
-                    return user;
-                }
-            }),
-        new models.course().where({isis_id: courseData.isis_id}).fetch({required: true}).then(function(course) {
-                if(course === null) {
-                    return new models.course(courseData).save();
-                } else {
-                    return course;
-                }
-            })
-    ]).then(function(result) {
+    var knex = models._bookshelf.knex;
 
-        //result[0][0].get('name').then(function(name) {
-        //    console.log("Received user: " + name);
-        //});
-
+    knex.transaction(function(trx) {
+        Promise.all([
+            // Insert the user, get his ID
+            knex('users').transacting(trx).returning('id').insert(userData),
+            // Insert the course, get its ID
+            knex('courses').transacting(trx).returning('id').insert(courseData)
+        ]).then(
+            // When both inserts are done, insert the junction
+            function(results) {
+                return knex('course_user').transacting(trx).insert({
+                    user_id: results[0][0],
+                    course_id: results[1][0],
+                    teacher: (req.payload.roles === 'Instructor')
+                })
+                .then(trx.commit)
+                .catch(trx.rollback);
+            }
+        ).catch(function(err) {
+            trx.rollback();
+            console.log(err);
+        });
+    }).then(function(resp) {
+        // Send a reply
         reply('Hello, world!');
+    }).catch(function(err) {
+        console.log('Caught error:');
+        console.error(err);
+
+        reply('An error occurred (did you clear the database? you should...)');
     });
 };
 
