@@ -5,6 +5,7 @@ exports.up = function(knex) {
     table.increments('id').primary();
     table.string('name');
     table.string('email').unique().notNullable();
+    table.integer('isis_id').unique();
     table.timestamps();
   });
 };

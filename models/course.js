@@ -1,7 +1,6 @@
 var checkit = require('checkit');
 
-module.exports = function (bookshelf, serv) {
-		var server = serv;
+module.exports = function (bookshelf) {
     var Model = bookshelf.Model.extend({
         tableName: 'courses',
         hasTimestamps: true,
@@ -35,7 +34,6 @@ module.exports = function (bookshelf, serv) {
 
         // Overwrite initialize function to call validate method
         initialize: function () {
-					this.on('created', this.afterCreate.bind(this));
 					this.on('saving', this.validate.bind(this));
         },
 
@@ -44,23 +42,17 @@ module.exports = function (bookshelf, serv) {
             return new checkit(this.validations).run(this.attributes);
         },
 
-        // Get all users in this course
-        users: function () {
+        // Get all supervisors in this course
+        supervisors: function () {
             var User = server.plugins.models.user;
-            var CourseUser = server.plugins.models.courseuser;
-            return this.belongsToMany(User).through(CourseUser);
+            return this.belongsToMany(User, 'courses_supervisors');
         },
 
-				afterCreate: function (model, resp, options) {
-					this.createUser(model, resp, options);
-				},
-
-				createUser: function (model, resp, options){
-					server.plugins.models.user.findOrCreate({email: model.userAttributes.email}, model.userAttributes)
-					.then(function(user){
-						return server.plugins.models.courseuser.findOrCreate({user_id: user.id, course_id: model.id}, {user_id: user.id, course_id: model.id, teacher: model.teacher})
-					})
-				}
+				// Get all students in this course
+				students: function () {
+            var User = server.plugins.models.user;
+            return this.belongsToMany(User, 'courses_students');
+        }
     });
     return Model;
 };

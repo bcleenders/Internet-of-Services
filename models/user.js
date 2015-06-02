@@ -25,7 +25,7 @@ module.exports = function(bookshelf) {
 		courses: function() {
 			var Course = server.plugins.models.course;
 			var CourseUser = server.plugins.models.courseuser;
-			return this.belongsToMany(Course).through(CourseUser);
+			return this.belongsToMany(Course);
 		},
 
 		// Get all groups for this user

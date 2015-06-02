@@ -19,12 +19,12 @@ var knex = require('knex')({
 
 var bookshelf = require('bookshelf')(knex);
 
-bookshelf.Model.findOrCreate = function(query, attributes){
+bookshelf.Model.findOrCreate = function(query, attributes, options){
   var model = this;
-  return new model(query).fetch()
+  return new model(query).fetch(options)
   .then(function(object){
     if(object === null) {
-        return new model(attributes).save();
+        return new model(attributes).save(null, options);
     } else {
         return object;
     }
@@ -44,7 +44,7 @@ exports.register = function (server, options, next) {
 
     // Loop over all model definitions, initialize them with bookshelf and add them to the models object
     for(var name in modelDefinitions) {
-        models[name.toLowerCase()] = modelDefinitions[name](bookshelf, server);
+        models[name.toLowerCase()] = modelDefinitions[name](bookshelf);
     }
 
     // Allow accessing the models through server.plugins.models.<modelname, i.e. 'user'>
