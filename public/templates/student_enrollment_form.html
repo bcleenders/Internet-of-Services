@@ -1,9 +1,12 @@
 <div class="container">
     <h2>Welcome {{student.name}}</h2>
-    <p>
-        You are enrolling for {{course.name}}, {{course.semester}} {{course.year}}. Please select your information and preferences below:
-    </p>
+    <p>You are enrolling for {{course.name}}, {{course.semester}} {{course.year}}.</p>
 
+    {{#if course.description}}
+        <p>{{course.description}}</p>
+    {{/if}}
+
+    <p>Please select your information and preferences below:</p>
     <form>
         <div class="row">
             <div class="four columns">
@@ -32,7 +35,10 @@
             </div>
         </div>
         <p>
-            The deadline for enrollment is {{course.enrollment_deadline}}.
+            The deadline for enrollment is <span id="deadline"></span>.
+            <script language="JavaScript">
+                $('#deadline').text('{{course.enrollment_deadline}}');
+            </script>
         </p>
         <input class="button-primary" type="submit" value="Enroll">
     </form>

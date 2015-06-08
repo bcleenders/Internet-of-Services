@@ -1,11 +1,10 @@
 var Boom = require('boom');
 var Promise = require('bluebird');
 var _ = require('lodash');
+var moment = require('moment');
 
 var handle = function (req, reply) {
     // TODO: verify signature!
-
-    console.log('Called...');
 
     var models = req.server.plugins.models;
 
@@ -57,7 +56,7 @@ var handle = function (req, reply) {
 
         }).then(function (c) {
             // At this point, both user and course are populated.
-            if(!isInstructor) {
+            if(isInstructor) {
                 // Instructor workflow
                 reply.view('course_properties_form', {
                     course: {
@@ -72,22 +71,41 @@ var handle = function (req, reply) {
                     }, submittedStatus: course.locked ? 'checked' : ''
                 });
             } else {
+                var enrollment_deadline = moment('2015-06-09');//moment(course.get('enrollment_deadline'));
                 // Student workflow
-                reply.view('student_enrollment_form', {
-                    course: {
-                        id: course.get('id'),
-                        name: course.get('name'),
-                        semester: course.get('semester'),
-                        year: course.get('year'),
-                        enrollment_deadline: dateToString(new Date('7/1/2015'))
-                    }, student: {
-                        name: user.get('name')
-                    }, debuginfo: {
-                        payload: JSON.stringify(req.payload, null, 4)
-                    }
-                });
+                if(moment().isAfter(enrollment_deadline)) {
+                    console.log('Before');
+                    // Deadline is still in the future -> can't edit it anymore!
+                    reply.view('student_group', {
+                        group: {
+                            name: 'fooo',
+                            teammembers: [
+                                {
+                                    name: 'Juan'
+                                }, {
+                                    name: 'Marc'
+                                }
+                            ]
+                        }
+                    })
+                } else {
+                    console.log('after');
+                    // Deadline has passed -> show groups!
+                    reply.view('student_enrollment_form', {
+                        course: {
+                            id: course.get('id'),
+                            name: course.get('name'),
+                            semester: course.get('semester'),
+                            year: course.get('year'),
+                            enrollment_deadline: dateToString(enrollment_deadline)
+                        }, student: {
+                            name: user.get('name')
+                        }, debuginfo: {
+                            payload: JSON.stringify(req.payload, null, 4)
+                        }
+                    });
+                }
             }
-
         }, function (err) {
             if (err.message !== "abort promise chain") {
                 reply('Fuck, world!');
@@ -95,36 +113,9 @@ var handle = function (req, reply) {
         });
 };
 
+// Returns something like Jun 9th 2015, 12:00 am (in 7 hours)
 var dateToString = function(date) {
-    var weekdays = [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday'
-    ];
-    var months = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
-    ];
-
-    var weekday = weekdays[date.getUTCDay()];
-    var monthday = date.getDate();
-    var month = months[date.getMonth()];
-
-    return weekday + ' ' + monthday + ' ' + month;
+    return date.format("MMM Do YYYY, h:mm a") + ' (' + date.fromNow() + ')';
 };
 
 module.exports = {

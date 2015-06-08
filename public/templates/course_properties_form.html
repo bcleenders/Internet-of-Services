@@ -1,6 +1,10 @@
 <div class="container">
     <h2>Welcome {{supervisor.name}}</h2>
 
+    <p>You are editing the group registration for {{course.name}}.</p>
+
+    <p>Changes you make on this page will <strong>not</strong> affect your ISIS course.</p>
+
     <form>
         <div class="row">
             <div class="six columns">
@@ -21,17 +25,13 @@
                     // Select the one
                     $('#semester').val('{{course.semester}}');
                 </script>
-                <!--<input class="u-full-width" type="text" placeholder="{{course.semester}}" id="semester">-->
             </div>
         </div>
         <label for="description">Description</label>
         <textarea class="u-full-width" placeholder="Some description..." id="description"></textarea>
-        <label class="opened">
-            <input type="checkbox" {{submittedStatus}}>
-            <span class="label-body">Open for enrollment (disables editing permanently)</span>
-        </label>
 
-        <input class="button-primary" type="submit" value="Submit">
+        <input class="button-primary" type="submit" value="Save as draft">
+        <input class="button-primary" type="submit" value="Save">
     </form>
 
     <p>Debugging info:</p>
