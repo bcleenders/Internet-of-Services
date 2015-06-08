@@ -13,25 +13,6 @@ module.exports = function (bookshelf) {
             year: ['required', 'numeric']
         },
 
-				virtuals: {
-			    userAttributes: {
-			      get: function () {
-			        return this._userAttributes;
-			      },
-			      set: function(value) {
-			        this._userAttributes = value;
-			      }
-			    },
-					teacher: {
-			      get: function () {
-			        return this._teacher;
-			      },
-			      set: function(value) {
-			        this._teacher = value;
-			      }
-			    }
-			  },
-
         // Overwrite initialize function to call validate method
         initialize: function () {
 					this.on('saving', this.validate.bind(this));

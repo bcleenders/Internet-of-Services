@@ -6,6 +6,7 @@ exports.up = function(knex) {
     table.string('name');
     table.string('semester');
     table.integer('year');
+    table.dateTime('enrollment_deadline');
     table.integer('isis_id').unique();
     table.timestamps();
   });
