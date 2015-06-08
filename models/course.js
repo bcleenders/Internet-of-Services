@@ -15,7 +15,7 @@ module.exports = function (bookshelf) {
 
         // Overwrite initialize function to call validate method
         initialize: function () {
-					this.on('saving', this.validate.bind(this));
+            this.on('saving', this.validate.bind(this));
         },
 
         // Validate function will check validation rules
@@ -29,10 +29,29 @@ module.exports = function (bookshelf) {
             return this.belongsToMany(User, 'courses_supervisors');
         },
 
-				// Get all students in this course
+        // Get all students in this course
         students: function () {
             var User = server.plugins.models.user;
             return this.belongsToMany(User, 'courses_students');
+        },
+
+        // Get all groups for this course
+        groups: function () {
+            var Group = server.plugins.models.group;
+            return this.hasMany(Group);
+        },
+
+        toJSON: function() {
+            return {
+                id: this.get('id'),
+                name: this.get('name'),
+                semester: this.get('semester'),
+                description: this.get('description'),
+                year: this.get('year'),
+                groups: this.related('groups').map(function(group) {
+                    return group.attributes
+                })
+            };
         }
     });
     return Model;

@@ -11,6 +11,7 @@ exports.up = function(knex) {
     table.integer('isis_id').unique();
     table.boolean('visible').defaultsTo(false);
     table.timestamps();
+    table.json('preferences');
   });
 };
 

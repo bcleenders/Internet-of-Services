@@ -28,7 +28,45 @@
             </div>
         </div>
         <label for="description">Description</label>
-        <textarea class="u-full-width" placeholder="A description or message for your students" id="description" name="description">{{course.description}}</textarea>
+        <textarea class="u-full-width" placeholder="A description or message for your students" id="description"
+                  name="description">{{course.description}}</textarea>
+
+        <p>Please specify what options the students have in choosing groups:</p>
+        <label>
+            <input type="checkbox">
+            <span class="label-body">Allow specifying preferred partners</span>
+        </label>
+
+        <div id="groups">
+            {{#each course.groups}}
+            <h6>Group {{name}}</h6>
+
+            <div class="row">
+                <div class="six columns">
+                    <label for="groups[{{id}}][name]">Group name</label>
+                    <input class="u-full-width" type="text" value="{{name}}" id="groups[{{id}}][name]"
+                           name="groups[{{id}}][name]">
+                </div>
+            </div>
+            {{/each}}
+        </div>
+
+        <a class="button" id="add_group">Add group</a>
+        <script language="JavaScript">
+            var newly_added = 0;
+
+            $('#add_group').click(function () {
+                var group_code = (
+                '<div class="row">' +
+                '   <div class="six columns">' +
+                '       <label for="groups[{{id}}][name]">Group name</label>' +
+                '       <input class="u-full-width" type="text" value="{{name}}" id="groups[{{id}}][name]" name="groups[{{id}}][name]">' +
+                '   </div>' +
+                '</div>'
+                );
+                $(group_code).appendTo($('#groups'));
+            });
+        </script>
 
         <!--<input class="button-primary" type="submit" value="Save as draft">-->
         <input class="button-primary" type="submit" value="Save">

@@ -63,12 +63,8 @@ var handle = function (req, reply) {
             if(isInstructor) {
                 // Instructor workflow
                 reply.view('course_properties_form', {
-                    course: {
-                        id: course.get('id'),
-                        name: course.get('name'),
-                        semester: course.get('semester'),
-                        year: course.get('year')
-                    }, supervisor: {
+                    course: course.toJSON(),
+                    supervisor: {
                         name: user.get('name')
                     }, debuginfo: {
                         payload: JSON.stringify(req.payload, null, 4)
@@ -101,8 +97,6 @@ var handle = function (req, reply) {
                             year: course.get('year'),
                             description: course.get('description'),
                             enrollment_deadline: dateToString(enrollment_deadline)
-                        }, student: {
-                            name: user.get('name')
                         }, debuginfo: {
                             payload: JSON.stringify(req.payload, null, 4)
                         }
