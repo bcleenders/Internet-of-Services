@@ -5,19 +5,19 @@
 
     <p>Changes you make on this page will <strong>not</strong> affect your ISIS course.</p>
 
-    <form>
+    <form action="/course/{{course.id}}" method="POST">
         <div class="row">
             <div class="six columns">
                 <label for="coursename">Course name</label>
-                <input class="u-full-width" type="text" value="{{course.name}}" id="coursename">
+                <input class="u-full-width" type="text" value="{{course.name}}" id="coursename" name="name">
             </div>
             <div class="three columns">
                 <label for="year">Year</label>
-                <input class="u-full-width" type="text" value="{{course.year}}" id="year">
+                <input class="u-full-width" type="text" value="{{course.year}}" id="year" name="year">
             </div>
             <div class="three columns">
                 <label for="year">Semester</label>
-                <select class="u-full-width" id="semester">
+                <select class="u-full-width" id="semester" name="semester">
                     <option value="SS">Sommer</option>
                     <option value="WS">Winter</option>
                 </select>
@@ -28,9 +28,9 @@
             </div>
         </div>
         <label for="description">Description</label>
-        <textarea class="u-full-width" placeholder="Some description..." id="description"></textarea>
+        <textarea class="u-full-width" placeholder="A description or message for your students" id="description" name="description">{{course.description}}</textarea>
 
-        <input class="button-primary" type="submit" value="Save as draft">
+        <!--<input class="button-primary" type="submit" value="Save as draft">-->
         <input class="button-primary" type="submit" value="Save">
     </form>
 

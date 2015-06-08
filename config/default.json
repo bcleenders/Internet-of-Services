@@ -13,5 +13,9 @@
     "poolMin"             : 2,
     "poolMax"             : 10,
     "debug"               : false
+  },
+  "cookieAuth": {
+    "secret": "some secret",
+    "name": "groupBy session"
   }
 }

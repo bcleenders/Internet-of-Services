@@ -1,6 +1,5 @@
 var Boom = require('boom');
 var Promise = require('bluebird');
-var _ = require('lodash');
 var moment = require('moment');
 
 var handle = function (req, reply) {
@@ -31,10 +30,15 @@ var handle = function (req, reply) {
         .then(function (u) {
             user = u;
 
+            // Set the session info
+            req.auth.session.set({
+                id: user.get('id')
+            });
+
             if (isInstructor) {
                 return models.course.findOrCreate({isis_id: courseData.isis_id}, courseData, {withRelated: ['supervisors']});
             } else {
-                return new models.course({isis_id: courseData.isis_id}).fetch({withRelated: ['students']});
+                return new models.course({isis_id: courseData.isis_id, visible: true}).fetch({withRelated: ['students']});
             }
         })
         .then(function (c) {
@@ -71,10 +75,9 @@ var handle = function (req, reply) {
                     }, submittedStatus: course.locked ? 'checked' : ''
                 });
             } else {
-                var enrollment_deadline = moment('2015-06-09');//moment(course.get('enrollment_deadline'));
+                var enrollment_deadline = moment(course.get('enrollment_deadline'));
                 // Student workflow
                 if(moment().isAfter(enrollment_deadline)) {
-                    console.log('Before');
                     // Deadline is still in the future -> can't edit it anymore!
                     reply.view('student_group', {
                         group: {
@@ -89,7 +92,6 @@ var handle = function (req, reply) {
                         }
                     })
                 } else {
-                    console.log('after');
                     // Deadline has passed -> show groups!
                     reply.view('student_enrollment_form', {
                         course: {
@@ -97,6 +99,7 @@ var handle = function (req, reply) {
                             name: course.get('name'),
                             semester: course.get('semester'),
                             year: course.get('year'),
+                            description: course.get('description'),
                             enrollment_deadline: dateToString(enrollment_deadline)
                         }, student: {
                             name: user.get('name')

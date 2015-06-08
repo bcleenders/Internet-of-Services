@@ -22,12 +22,15 @@ module.exports = function(bookshelf) {
 		},
 
 		// Get all courses for this user
-		courses: function() {
+		supervisorCourses: function() {
 			var Course = server.plugins.models.course;
-			var CourseUser = server.plugins.models.courseuser;
-			return this.belongsToMany(Course);
+			return this.belongsToMany(Course, "courses_supervisors");
 		},
 
+		studentCourses: function() {
+			var Course = server.plugins.models.course;
+			return this.belongsToMany(Course, "courses_students");
+		},
 		// Get all groups for this user
 		groups: function() {
 			var Group = server.plugins.models.group;

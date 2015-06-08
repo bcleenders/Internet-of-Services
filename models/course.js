@@ -30,7 +30,7 @@ module.exports = function (bookshelf) {
         },
 
 				// Get all students in this course
-				students: function () {
+        students: function () {
             var User = server.plugins.models.user;
             return this.belongsToMany(User, 'courses_students');
         }

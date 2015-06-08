@@ -11,16 +11,14 @@ var routes = [
         path: '/signup',
         config: {
             cors: true,
+            auth: false,
             handler: require('./handlers/signup').handle
         }
     },
     {
-        method: 'GET',
-        path: '/signup',
-        handler: function(res, reply) {
-            console.log("AAAAAAAA");
-            reply('This is the GET endpoint &rarr; you should never hit this...');
-        }
+        method: 'POST',
+        path: '/course/{course_id}',
+        handler: require('./handlers/updateCourse').handle
     }
 ];
 
