@@ -13,10 +13,5 @@
     "poolMin"             : 2,
     "poolMax"             : 10,
     "debug"               : false
-  },
-  "saml": {
-      "path": "/login/callback",
-      "protocol": "http",
-      "entryPoint": ""
-    }
+  }
 }

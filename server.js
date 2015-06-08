@@ -1,7 +1,6 @@
 var Hapi = require('hapi');
 var config = require('config');
 var server = new Hapi.Server();
-var saml = require('./config/plugins/saml')
 var fs = require('fs');
 var path = require('path');
 
@@ -30,7 +29,7 @@ server.route({
             path: 'public/static'
         }
     }
-})
+});
 
 // Load the routes
 var routes = require('./routes');

@@ -29,8 +29,9 @@ bookshelf.Model.findOrCreate = function(query, attributes, options){
         return object;
     }
   });
-}
-bookshelf.plugin('virtuals')
+};
+
+bookshelf.plugin('virtuals');
 
 exports.register = function (server, options, next) {
 

@@ -1,0 +1,42 @@
+<div class="container">
+    <h2>Welcome {{student.name}}</h2>
+    <p>
+        You are enrolling for {{course.name}}, {{course.semester}} {{course.year}}. Please select your information and preferences below:
+    </p>
+
+    <form>
+        <div class="row">
+            <div class="four columns">
+                <label for="first">Favorite</label>
+                <select class="u-full-width" id="first">
+                    <option value="1">Super awesome group 1</option>
+                    <option value="2">Bla</option>
+                    <option value="3">Fooo</option>
+                </select>
+            </div>
+            <div class="four columns">
+                <label for="second">Second choice</label>
+                <select class="u-full-width" id="second">
+                    <option value="1">Super awesome group 1</option>
+                    <option value="2">Bla</option>
+                    <option value="3">Fooo</option>
+                </select>
+            </div>
+            <div class="four columns">
+                <label for="third">Third choice</label>
+                <select class="u-full-width" id="third">
+                    <option value="1">Super awesome group 1</option>
+                    <option value="2">Bla</option>
+                    <option value="3">Fooo</option>
+                </select>
+            </div>
+        </div>
+        <p>
+            The deadline for enrollment is {{course.enrollment_deadline}}.
+        </p>
+        <input class="button-primary" type="submit" value="Enroll">
+    </form>
+
+    <p>Debugging info:</p>
+    <pre><code>{{debuginfo.payload}}</code></pre>
+</div>

@@ -9,7 +9,18 @@ var routes = [
     {
         method: 'POST',
         path: '/signup',
-        handler: require('./handlers/signup').handle
+        config: {
+            cors: true,
+            handler: require('./handlers/signup').handle
+        }
+    },
+    {
+        method: 'GET',
+        path: '/signup',
+        handler: function(res, reply) {
+            console.log("AAAAAAAA");
+            reply('This is the GET endpoint &rarr; you should never hit this...');
+        }
     }
 ];
 
