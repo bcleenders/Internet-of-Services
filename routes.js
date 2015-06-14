@@ -16,9 +16,14 @@ var routes = [
         }
     },
     {
+        method: 'GET',
+        path: '/course/{course_id}/edit',
+        handler: require('./handlers/courses/edit').handle
+    },
+    {
         method: 'POST',
         path: '/course/{course_id}',
-        handler: require('./handlers/updateCourse').handle
+        handler: require('./handlers/courses/update').handle
     },
     {
         method: 'POST',

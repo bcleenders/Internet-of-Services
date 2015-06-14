@@ -16,6 +16,6 @@
   },
   "cookieAuth": {
     "secret": "some secret",
-    "name": "groupBy session"
+    "name": "ios"
   }
 }

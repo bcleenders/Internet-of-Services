@@ -69,38 +69,39 @@
             </label> <strong>Compulsory attendance</strong>: adds support for a group of students that must be assigned
             to a group (i.e. not the waitinglist).</span>
         </div>
-
+        <hr>
+        <h5>Groups</h5>
         <div id="groups">
             {{#each course.groups}}
-            <hr>
-            <h5>Group {{name}}</h5>
 
-            <!--A bit hacky, but we need this id...-->
-            <input type="hidden" value="{{id}}" name="groups[{{id}}][id]">
+            <div class="form-fields">
+              <!--A bit hacky, but we need this id...-->
+              <input type="hidden" data-type="id" value="{{id}}" name="groups[{{id}}][id]">
 
-            <div class="row">
-                <div class="six columns">
-                    <label for="groups[{{id}}][name]">Group name</label>
-                    <input class="u-full-width" type="text" value="{{name}}" id="groups[{{id}}][name]"
-                           name="groups[{{id}}][name]">
-                </div>
-                <div class="three columns">
-                    <label for="groups[{{id}}][minsize]">Minimum size</label>
-                    <input class="u-full-width" type="number" value="{{minsize}}" id="groups[{{id}}][minsize]"
-                           name="groups[{{id}}][minsize]">
-                </div>
-                <div class="three columns">
-                    <label for="groups[{{id}}][maxsize]">Maximum size</label>
-                    <input class="u-full-width" type="number" value="{{maxsize}}" id="groups[{{id}}][maxsize]"
-                           name="groups[{{id}}][maxsize]">
-                </div>
-            </div>
-            <div class="row">
-                <div class="nine columns">
-                        <textarea class="u-full-width" placeholder="A description of this group."
-                                  id="groups[{{id}}][description]"
-                                  name="groups[{{id}}][description]">{{description}}</textarea>
-                </div>
+              <div class="row">
+                  <div class="six columns">
+                      <label for="groups[{{id}}][name]">Group name</label>
+                      <input class="u-full-width" type="text" value="{{name}}" id="groups[{{id}}][name]"
+                             name="groups[{{id}}][name]">
+                  </div>
+                  <div class="three columns">
+                      <label for="groups[{{id}}][minsize]">Minimum size</label>
+                      <input class="u-full-width" type="number" value="{{minsize}}" id="groups[{{id}}][minsize]"
+                             name="groups[{{id}}][minsize]">
+                  </div>
+                  <div class="three columns">
+                      <label for="groups[{{id}}][maxsize]">Maximum size</label>
+                      <input class="u-full-width" type="number" value="{{maxsize}}" id="groups[{{id}}][maxsize]"
+                             name="groups[{{id}}][maxsize]">
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="nine columns">
+                          <textarea class="u-full-width" placeholder="A description of this group."
+                                    id="groups[{{id}}][description]"
+                                    name="groups[{{id}}][description]">{{description}}</textarea>
+                  </div>
+              </div>
             </div>
             <script language="JavaScript">
                 // Put in a function to prevent scope collisions
@@ -123,40 +124,7 @@
             {{/each}}
         </div>
 
-        <a class="button" id="add_group">Add group</a>
-        <script language="JavaScript">
-            var newly_added = 0;
-
-            $('#add_group').click(function () {
-                var group_code = (
-                '<hr>' +
-                '<div class="row">' +
-                '   <div class="six columns">' +
-                '       <label for="new_groups[' + newly_added + '][name]">Group name</label>' +
-                '       <input class="u-full-width" placeholder="Group name" type="text" id="new_groups[' + newly_added + '][name]" ' +
-                '       name="new_groups[' + newly_added + '][name]">' +
-                '   </div>' +
-                '   <div class="three columns">' +
-                '       <label for="new_groups[' + newly_added + '][minsize]">Minimum size</label>' +
-                '       <input class="u-full-width" type="number" id="new_groups[' + newly_added + '][minsize]" name="new_groups[' + newly_added + '][minsize]">' +
-                '   </div>' +
-                '   <div class="three columns">' +
-                '       <label for="new_groups[' + newly_added + '][maxsize]">Maximum size</label>' +
-                '       <input class="u-full-width" type="number" id="new_groups[' + newly_added + '][maxsize]" name="new_groups[' + newly_added + '][maxsize]">' +
-                '   </div>' +
-                '</div>' +
-                '<div class="row">' +
-                '    <div class="eight columns">' +
-                '        <textarea class="u-full-width" placeholder="A description of this group." id="new_groups[' + newly_added + '][description]"' +
-                '        name="new_groups[' + newly_added + '][description]">{{description}}</textarea>' +
-                '    </div>' +
-                '</div>'
-                );
-                $(group_code).appendTo($('#groups'));
-
-                newly_added++;
-            });
-        </script>
+        <a class="button add_fields" id="add_group" data-target="div#groups">Add group</a>
 
         <!--<input class="button-primary" type="submit" value="Save as draft">-->
         <input class="button-primary" type="submit" value="Save">

@@ -57,17 +57,11 @@ var handle = function (req, reply) {
                 reply.view('404', {message: 'this course does not exist, or you do not have access to it.'});
                 throw new Error('abort promise chain');
             }
-
-        }).then(function (c) {
+        }).then(function () {
             // At this point, both user and course are populated.
             if(isInstructor) {
                 // Instructor workflow
-                reply.view('course_properties_form', {
-                    course: course.toJSON(),
-                    debuginfo: {
-                        payload: JSON.stringify(req.payload, null, 4)
-                    }
-                });
+                reply().redirect('/course/' + course.get('id') + '/edit');
             } else {
                 var enrollment_deadline = moment(course.get('enrollment_deadline'));
                 // Student workflow

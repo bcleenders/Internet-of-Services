@@ -36,15 +36,14 @@ var handle = function (req, reply) {
                 description: req.payload.description,
                 preferences: preferenceData
             };
-
             return course.save(courseData, {patch: true});
         } else {
             reply.view('404', {message: 'we could not find a course with this ID where you are a supervisor.'}).code(404);
+            // throw new Error('abort promise chain');
         }
     }).then(function (c) {
         // Course is created/updated
         course = c;
-
         if (req.payload.new_groups) {
             return Promise.map(req.payload.new_groups, function (g) {
                 var group = new models.group({
@@ -64,8 +63,11 @@ var handle = function (req, reply) {
         return new models.course({id: course.get('id')}).fetch({withRelated: ['groups']});
 
     }).then(function (course) {
+      var c = course.toJSON();
+      if(c.groups.length === 0)
+        c.groups = [{id: 0}]
         reply.view('course_properties_form', {
-            course: course.toJSON(),
+            course: c,
             debuginfo: {
                 payload: JSON.stringify(req.payload, null, 2)
             }, submittedStatus: course.locked ? 'checked' : ''
