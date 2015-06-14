@@ -48,6 +48,7 @@ module.exports = function (bookshelf) {
                 semester: this.get('semester'),
                 description: this.get('description'),
                 year: this.get('year'),
+                preferences: this.get('preferences'),
                 groups: this.related('groups').map(function(group) {
                     return group.attributes
                 })

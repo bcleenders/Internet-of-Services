@@ -1,45 +1,73 @@
 <div class="container">
-    <h2>Welcome {{student.name}}</h2>
-    <p>You are enrolling for {{course.name}}, {{course.semester}} {{course.year}}.</p>
+
+    <div class="row">
+        <h2>Enrollment for {{course.name}}, {{course.semester}} {{course.year}}</h2>
+        <p>The enrollment deadline for this course is {{enrollment_deadline}}.</p>
+    </div>
 
     {{#if course.description}}
+    <div class="row">
+        <h5>Course description</h5>
         <p>{{course.description}}</p>
+    </div>
     {{/if}}
 
-    <p>Please select your information and preferences below:</p>
+    <hr>
+
     <form>
+        <h5>Preferences</h5>
+
+        {{#if course.preferences.preferences}}
+        <div class="row">
+            You can choose your top 3 favorite groups:
+        </div>
         <div class="row">
             <div class="four columns">
                 <label for="first">Favorite</label>
                 <select class="u-full-width" id="first">
-                    <option value="1">Super awesome group 1</option>
-                    <option value="2">Bla</option>
-                    <option value="3">Fooo</option>
+                    {{#each course.groups}}
+                    <option value="{{id}}">{{name}}</option>
+                    {{/each}}
                 </select>
             </div>
             <div class="four columns">
                 <label for="second">Second choice</label>
                 <select class="u-full-width" id="second">
-                    <option value="1">Super awesome group 1</option>
-                    <option value="2">Bla</option>
-                    <option value="3">Fooo</option>
+                    {{#each course.groups}}
+                    <option value="{{id}}">{{name}}</option>
+                    {{/each}}
                 </select>
             </div>
             <div class="four columns">
                 <label for="third">Third choice</label>
                 <select class="u-full-width" id="third">
-                    <option value="1">Super awesome group 1</option>
-                    <option value="2">Bla</option>
-                    <option value="3">Fooo</option>
+                    {{#each course.groups}}
+                    <option value="{{id}}">{{name}}</option>
+                    {{/each}}
                 </select>
             </div>
         </div>
-        <p>
-            The deadline for enrollment is <span id="deadline"></span>.
-            <script language="JavaScript">
-                $('#deadline').text('{{course.enrollment_deadline}}');
-            </script>
-        </p>
+        {{/if}}
+
+        {{#if course.preferences.friends}}
+        <div class="row">
+            <p>
+                If there is anyone you would like to work with, you can select them from this list.<br />
+                Anyone missing? This list only shows students enrolled in this course. If your friends are missing from the list, you can check back later, add them and update your preferences.
+            </p>
+        </div>
+        <div class="row">
+            {{#each course.students}}
+                <div class="three columns">
+                    <label>
+                        <input type="checkbox">
+                        <span class="label-body">{{name}}</span>
+                    </label>
+                </div>
+            {{/each}}
+        </div>
+        {{/if}}
+
         <input class="button-primary" type="submit" value="Enroll">
     </form>
 

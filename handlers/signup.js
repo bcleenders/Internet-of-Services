@@ -36,9 +36,9 @@ var handle = function (req, reply) {
             });
 
             if (isInstructor) {
-                return models.course.findOrCreate({isis_id: courseData.isis_id}, courseData, {withRelated: ['supervisors']});
+                return models.course.findOrCreate({isis_id: courseData.isis_id}, courseData, {withRelated: ['supervisors', 'groups', 'groups.students']});
             } else {
-                return new models.course({isis_id: courseData.isis_id, visible: true}).fetch({withRelated: ['students']});
+                return new models.course({isis_id: courseData.isis_id, visible: true}).fetch({withRelated: ['supervisors', 'students', 'groups', 'groups.students']});
             }
         })
         .then(function (c) {
@@ -54,7 +54,7 @@ var handle = function (req, reply) {
                     }
                 }
             } else {
-                reply(Boom.notFound('Resource not found contact your teacher'));
+                reply.view('404', {message: 'this course does not exist, or you do not have access to it.'});
                 throw new Error('abort promise chain');
             }
 
@@ -64,40 +64,24 @@ var handle = function (req, reply) {
                 // Instructor workflow
                 reply.view('course_properties_form', {
                     course: course.toJSON(),
-                    supervisor: {
-                        name: user.get('name')
-                    }, debuginfo: {
+                    debuginfo: {
                         payload: JSON.stringify(req.payload, null, 4)
-                    }, submittedStatus: course.locked ? 'checked' : ''
+                    }
                 });
             } else {
                 var enrollment_deadline = moment(course.get('enrollment_deadline'));
                 // Student workflow
                 if(moment().isAfter(enrollment_deadline)) {
-                    // Deadline is still in the future -> can't edit it anymore!
+                    // Deadline has passed -> show results!
                     reply.view('student_group', {
-                        group: {
-                            name: 'fooo',
-                            teammembers: [
-                                {
-                                    name: 'Juan'
-                                }, {
-                                    name: 'Marc'
-                                }
-                            ]
-                        }
+                        groups: course.groups()
                     })
                 } else {
-                    // Deadline has passed -> show groups!
+                    // Deadline has not passed yet -> allow students to change their preferences.
                     reply.view('student_enrollment_form', {
-                        course: {
-                            id: course.get('id'),
-                            name: course.get('name'),
-                            semester: course.get('semester'),
-                            year: course.get('year'),
-                            description: course.get('description'),
-                            enrollment_deadline: dateToString(enrollment_deadline)
-                        }, debuginfo: {
+                        course: course.toJSON(),
+                        enrollment_deadline: dateToString(enrollment_deadline),
+                        debuginfo: {
                             payload: JSON.stringify(req.payload, null, 4)
                         }
                     });
@@ -105,7 +89,7 @@ var handle = function (req, reply) {
             }
         }, function (err) {
             if (err.message !== "abort promise chain") {
-                reply('Fuck, world!');
+                reply.view('404');
             }
         });
 };

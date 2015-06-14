@@ -11,18 +11,44 @@ var handle = function (req, reply) {
 
         // Check that the user is allowed to edit this course:
         if(course) {
+            var preferenceData;
+            if(req.payload.preferences) {
+                preferenceData = {
+                    preferences: req.payload.preferences.preferences === 'on',
+                    friends: req.payload.preferences.friends === 'on',
+                    diverse: req.payload.preferences.diverse === 'on',
+                    compulsory: req.payload.preferences.compulsory === 'on'
+                };
+            } else {
+                preferenceData = {
+                    preferences: false,
+                    friends: false,
+                    diverse: false
+                }
+            }
+
+            if(req.payload.new_groups) {
+                for(var i = 0; i < req.payload.new_groups.length; i++) {
+                    var group = req.payload.new_groups[i];
+
+                    console.log(group.name);
+                    // Save this group
+                    
+                }
+            }
 
             // So now we know the user is allowed to update the course:
-            courseData = {
+            var courseData = {
                 name: req.payload.name,
                 year: JSON.parse(req.payload.year),
                 semester: req.payload.semester,
-                description: req.payload.description
+                description: req.payload.description,
+                preferences: preferenceData
             };
 
             return course.save(courseData, {patch: true});
         } else {
-            reply(Boom.unauthorized('You are not allowed to visit this page.'));
+            reply.view('404', {message: 'we could not find a course with this ID where you are a supervisor.'}).code(404);
         }
     }).then(function(course) {
         // Course is updated
