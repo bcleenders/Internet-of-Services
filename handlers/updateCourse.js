@@ -4,15 +4,16 @@ var moment = require('moment');
 
 var handle = function (req, reply) {
     var user = req.auth.credentials;
+    var course;
     var models = req.server.plugins.models;
 
-    new models.user({id: user.id}).fetch({withRelated: ['supervisorCourses', "supervisorCourses.groups"]}).then(function(user) {
+    new models.user({id: user.id}).fetch({withRelated: ['supervisorCourses', "supervisorCourses.groups"]}).then(function (user) {
         var course = user.related("supervisorCourses").get(req.params.course_id);
 
         // Check that the user is allowed to edit this course:
-        if(course) {
+        if (course) {
             var preferenceData;
-            if(req.payload.preferences) {
+            if (req.payload.preferences) {
                 preferenceData = {
                     preferences: req.payload.preferences.preferences === 'on',
                     friends: req.payload.preferences.friends === 'on',
@@ -24,16 +25,6 @@ var handle = function (req, reply) {
                     preferences: false,
                     friends: false,
                     diverse: false
-                }
-            }
-
-            if(req.payload.new_groups) {
-                for(var i = 0; i < req.payload.new_groups.length; i++) {
-                    var group = req.payload.new_groups[i];
-
-                    console.log(group.name);
-                    // Save this group
-                    
                 }
             }
 
@@ -50,9 +41,29 @@ var handle = function (req, reply) {
         } else {
             reply.view('404', {message: 'we could not find a course with this ID where you are a supervisor.'}).code(404);
         }
-    }).then(function(course) {
-        // Course is updated
-        debugger;
+    }).then(function (c) {
+        // Course is created/updated
+        course = c;
+
+        if (req.payload.new_groups) {
+            return Promise.map(req.payload.new_groups, function (g) {
+                var group = new models.group({
+                    name: g.name,
+                    description: g.description,
+                    minsize: g.minsize,
+                    maxsize: g.maxsize,
+                    course_id: course.get('id')
+                });
+                return group.save();
+            })
+        }
+    }).then(function (groups) {
+        // New groups are created
+
+        // Reload the course, to show the latest info!
+        return new models.course({id: course.get('id')}).fetch({withRelated: ['groups']});
+
+    }).then(function (course) {
         reply.view('course_properties_form', {
             course: course.toJSON(),
             debuginfo: {

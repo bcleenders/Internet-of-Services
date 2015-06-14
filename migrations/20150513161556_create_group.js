@@ -5,6 +5,7 @@ exports.up = function(knex) {
     table.increments('id').primary();
     table.string('name');
     table.integer('course_id').notNullable().references('courses.id');
+    table.string('description');
     table.integer('minsize').defaultTo(0);
     table.integer('maxsize').defaultTo(0);
     table.boolean('waitingList').notNullable().defaultTo(false);

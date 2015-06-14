@@ -1,4 +1,5 @@
 var checkit = require('checkit');
+var Promise = require('bluebird');
 
 module.exports = function (bookshelf) {
     var Model = bookshelf.Model.extend({

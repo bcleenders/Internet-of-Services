@@ -3,7 +3,7 @@
 
     <p>Changes you make on this page will <strong>not</strong> affect your ISIS course.</p>
 
-    <form action="/course/{{course.id}}/enroll" method="POST">
+    <form action="/course/{{course.id}}" method="POST">
         <div class="row">
             <div class="six columns">
                 <label for="coursename">Course name</label>
@@ -85,13 +85,13 @@
                            name="groups[{{id}}][name]">
                 </div>
                 <div class="three columns">
-                    <label for="groups{{id}}minsize">Minimum size</label>
-                    <input class="u-full-width" type="number" value="{{name}}" id="groups{{id}}minsize"
+                    <label for="groups[{{id}}][minsize]">Minimum size</label>
+                    <input class="u-full-width" type="number" value="{{minsize}}" id="groups[{{id}}][minsize]"
                            name="groups[{{id}}][minsize]">
                 </div>
                 <div class="three columns">
-                    <label for="groups{{id}}maxsize">Maximum size</label>
-                    <input class="u-full-width" type="number" value="{{name}}" id="groups{{id}}maxsize"
+                    <label for="groups[{{id}}][maxsize]">Maximum size</label>
+                    <input class="u-full-width" type="number" value="{{maxsize}}" id="groups[{{id}}][maxsize]"
                            name="groups[{{id}}][maxsize]">
                 </div>
             </div>
@@ -105,8 +105,8 @@
             <script language="JavaScript">
                 // Put in a function to prevent scope collisions
                 (function () {
-                    var min = $('#groups' + {{id}} + 'minsize');
-                    var max = $('#groups'+{{id}}+'maxsize');
+                    var min = $('#groups[' + {{id}} + '[minsize]');
+                    var max = $('#groups[' + {{id}} + '[maxsize]');
 
                     min.change(function () {
                         if (min.val() > max.val()) {
@@ -135,6 +135,14 @@
                 '       <label for="new_groups[' + newly_added + '][name]">Group name</label>' +
                 '       <input class="u-full-width" placeholder="Group name" type="text" id="new_groups[' + newly_added + '][name]" ' +
                 '       name="new_groups[' + newly_added + '][name]">' +
+                '   </div>' +
+                '   <div class="three columns">' +
+                '       <label for="new_groups[' + newly_added + '][minsize]">Minimum size</label>' +
+                '       <input class="u-full-width" type="number" id="new_groups[' + newly_added + '][minsize]" name="new_groups[' + newly_added + '][minsize]">' +
+                '   </div>' +
+                '   <div class="three columns">' +
+                '       <label for="new_groups[' + newly_added + '][maxsize]">Maximum size</label>' +
+                '       <input class="u-full-width" type="number" id="new_groups[' + newly_added + '][maxsize]" name="new_groups[' + newly_added + '][maxsize]">' +
                 '   </div>' +
                 '</div>' +
                 '<div class="row">' +
