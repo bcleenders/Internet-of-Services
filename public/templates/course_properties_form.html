@@ -1,0 +1,167 @@
+<div class="container">
+    <h2>Editing {{course.name}}</h2>
+
+    <p>Changes you make on this page will <strong>not</strong> affect your ISIS course.</p>
+
+    <form action="/course/{{course.id}}" method="POST">
+        <div class="row">
+            <div class="six columns">
+                <label for="coursename">Course name</label>
+                <input class="u-full-width" type="text" value="{{course.name}}" id="coursename" name="name">
+            </div>
+            <div class="three columns">
+                <label for="year">Year</label>
+                <input class="u-full-width" type="text" value="{{course.year}}" id="year" name="year">
+            </div>
+            <div class="three columns">
+                <label for="year">Semester</label>
+                <select class="u-full-width" id="semester" name="semester">
+                    <option value="SS">Sommer</option>
+                    <option value="WS">Winter</option>
+                </select>
+                <script language="JavaScript">
+                    // Select the one
+                    $('#semester').val('{{course.semester}}');
+                </script>
+            </div>
+        </div>
+        <label for="description">Description</label>
+        <textarea class="u-full-width" placeholder="A description or message for your students" id="description"
+                  name="description">{{course.description}}</textarea>
+
+        <p>Please specify what options the students have in choosing groups:</p>
+
+        <div class="row">
+            <label class="switch">
+                <input type="checkbox" class="switch-input" name="preferences[preferences]" {{#if
+                       course.preferences.preferences}} checked {{/if}}>
+                <span class="switch-label" data-on="On" data-off="Off"></span>
+                <span class="switch-handle"></span>
+            </label> <strong>Enable topic preferences</strong>: enable choosing specific groups.</span>
+        </div>
+
+        <div class="row">
+            <label class="switch">
+                <input type="checkbox" class="switch-input" name="preferences[friends]" {{#if
+                       course.preferences.friends}} checked {{/if}}>
+                <span class="switch-label" data-on="On" data-off="Off"></span>
+                <span class="switch-handle"></span>
+            </label> <strong>Preferred partners</strong>: enabling this allows students to specify their preferred team
+            members.</span>
+        </div>
+
+        <div class="row">
+            <label class="switch">
+                <input type="checkbox" class="switch-input" name="preferences[diverse]" {{#if
+                       course.preferences.diverse}} checked {{/if}}>
+                <span class="switch-label" data-on="On" data-off="Off"></span>
+                <span class="switch-handle"></span>
+            </label> <strong>Maximize diversity</strong>: attempt to create very diverse groups. When disabled, groups
+            will be as evenly skilled as possible.</span>
+        </div>
+
+        <div class="row">
+            <label class="switch">
+                <input type="checkbox" class="switch-input" name="preferences[compulsory]" {{#if
+                       course.preferences.compulsory}} checked {{/if}}>
+                <span class="switch-label" data-on="On" data-off="Off"></span>
+                <span class="switch-handle"></span>
+            </label> <strong>Compulsory attendance</strong>: adds support for a group of students that must be assigned
+            to a group (i.e. not the waitinglist).</span>
+        </div>
+
+        <div id="groups">
+            {{#each course.groups}}
+            <hr>
+            <h5>Group {{name}}</h5>
+
+            <!--A bit hacky, but we need this id...-->
+            <input type="hidden" value="{{id}}" name="groups[{{id}}][id]">
+
+            <div class="row">
+                <div class="six columns">
+                    <label for="groups[{{id}}][name]">Group name</label>
+                    <input class="u-full-width" type="text" value="{{name}}" id="groups[{{id}}][name]"
+                           name="groups[{{id}}][name]">
+                </div>
+                <div class="three columns">
+                    <label for="groups[{{id}}][minsize]">Minimum size</label>
+                    <input class="u-full-width" type="number" value="{{minsize}}" id="groups[{{id}}][minsize]"
+                           name="groups[{{id}}][minsize]">
+                </div>
+                <div class="three columns">
+                    <label for="groups[{{id}}][maxsize]">Maximum size</label>
+                    <input class="u-full-width" type="number" value="{{maxsize}}" id="groups[{{id}}][maxsize]"
+                           name="groups[{{id}}][maxsize]">
+                </div>
+            </div>
+            <div class="row">
+                <div class="nine columns">
+                        <textarea class="u-full-width" placeholder="A description of this group."
+                                  id="groups[{{id}}][description]"
+                                  name="groups[{{id}}][description]">{{description}}</textarea>
+                </div>
+            </div>
+            <script language="JavaScript">
+                // Put in a function to prevent scope collisions
+                (function () {
+                    var min = $('#groups[' + {{id}} + '[minsize]');
+                    var max = $('#groups[' + {{id}} + '[maxsize]');
+
+                    min.change(function () {
+                        if (min.val() > max.val()) {
+                            max.val(min.val());
+                        }
+                    });
+                    max.change(function () {
+                        if (min.val() > max.val()) {
+                            min.val(max.val());
+                        }
+                    });
+                })();
+            </script>
+            {{/each}}
+        </div>
+
+        <a class="button" id="add_group">Add group</a>
+        <script language="JavaScript">
+            var newly_added = 0;
+
+            $('#add_group').click(function () {
+                var group_code = (
+                '<hr>' +
+                '<div class="row">' +
+                '   <div class="six columns">' +
+                '       <label for="new_groups[' + newly_added + '][name]">Group name</label>' +
+                '       <input class="u-full-width" placeholder="Group name" type="text" id="new_groups[' + newly_added + '][name]" ' +
+                '       name="new_groups[' + newly_added + '][name]">' +
+                '   </div>' +
+                '   <div class="three columns">' +
+                '       <label for="new_groups[' + newly_added + '][minsize]">Minimum size</label>' +
+                '       <input class="u-full-width" type="number" id="new_groups[' + newly_added + '][minsize]" name="new_groups[' + newly_added + '][minsize]">' +
+                '   </div>' +
+                '   <div class="three columns">' +
+                '       <label for="new_groups[' + newly_added + '][maxsize]">Maximum size</label>' +
+                '       <input class="u-full-width" type="number" id="new_groups[' + newly_added + '][maxsize]" name="new_groups[' + newly_added + '][maxsize]">' +
+                '   </div>' +
+                '</div>' +
+                '<div class="row">' +
+                '    <div class="eight columns">' +
+                '        <textarea class="u-full-width" placeholder="A description of this group." id="new_groups[' + newly_added + '][description]"' +
+                '        name="new_groups[' + newly_added + '][description]">{{description}}</textarea>' +
+                '    </div>' +
+                '</div>'
+                );
+                $(group_code).appendTo($('#groups'));
+
+                newly_added++;
+            });
+        </script>
+
+        <!--<input class="button-primary" type="submit" value="Save as draft">-->
+        <input class="button-primary" type="submit" value="Save">
+    </form>
+
+    <p>Debugging info:</p>
+    <pre><code>{{debuginfo.payload}}</code></pre>
+</div>

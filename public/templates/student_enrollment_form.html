@@ -1,0 +1,76 @@
+<div class="container">
+
+    <div class="row">
+        <h2>Enrollment for {{course.name}}, {{course.semester}} {{course.year}}</h2>
+        <p>The enrollment deadline for this course is {{enrollment_deadline}}.</p>
+    </div>
+
+    {{#if course.description}}
+    <div class="row">
+        <h5>Course description</h5>
+        <p>{{course.description}}</p>
+    </div>
+    {{/if}}
+
+    <hr>
+
+    <form action="/course/{{course.id}}/enroll" method="POST">
+        <h5>Preferences</h5>
+
+        {{#if course.preferences.preferences}}
+        <div class="row">
+            You can choose your top 3 favorite groups:
+        </div>
+        <div class="row">
+            <div class="four columns">
+                <label for="first">Favorite</label>
+                <select class="u-full-width" id="first">
+                    {{#each course.groups}}
+                    <option value="{{id}}">{{name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="four columns">
+                <label for="second">Second choice</label>
+                <select class="u-full-width" id="second">
+                    {{#each course.groups}}
+                    <option value="{{id}}">{{name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="four columns">
+                <label for="third">Third choice</label>
+                <select class="u-full-width" id="third">
+                    {{#each course.groups}}
+                    <option value="{{id}}">{{name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+        {{/if}}
+
+        {{#if course.preferences.friends}}
+        <div class="row">
+            <p>
+                If there is anyone you would like to work with, you can select them from this list.<br />
+                Anyone missing? This list only shows students enrolled in this course. If your friends are missing from the list, you can check back later, add them and update your preferences.
+            </p>
+        </div>
+        <div class="row">
+            {{#each course.students}}
+                <div class="three columns">
+                    <label>
+                        <input type="checkbox">
+                        <span class="label-body">{{name}}</span>
+                    </label>
+                </div>
+            {{/each}}
+        </div>
+        {{/if}}
+
+        <input class="button-primary" type="submit" value="Enroll">
+    </form>
+
+    <p>Debugging info:</p>
+    <pre><code>{{debuginfo.payload}}</code></pre>
+</div>

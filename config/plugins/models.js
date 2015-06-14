@@ -19,13 +19,29 @@ var knex = require('knex')({
 
 var bookshelf = require('bookshelf')(knex);
 
+bookshelf.Model.findOrCreate = function(query, attributes, options){
+  var model = this;
+  return new model(query).fetch(options)
+  .then(function(object){
+    if(object === null) {
+        return new model(attributes).save(null, options);
+    } else {
+        return object;
+    }
+  });
+};
+
+bookshelf.plugin('virtuals');
+
 exports.register = function (server, options, next) {
 
     // These are the files containing our model definitions
     var modelDefinitions = require('../../models');
 
     // These are the "instantiated" models -> use these for querying etc.
-    var models = {};
+    var models = {
+        _bookshelf: bookshelf
+    };
 
     // Loop over all model definitions, initialize them with bookshelf and add them to the models object
     for(var name in modelDefinitions) {

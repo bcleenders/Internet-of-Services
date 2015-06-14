@@ -1,0 +1,10 @@
+<div class="container">
+    <h2>Welcome back!</h2>
+    <p>You are a member of group {{group.name}}.</p>
+    <p>Your group members are:</p>
+    <ul>
+        {{#each group.students}}
+            <li>{{name}}</li>
+        {{/each}}
+    </ul>
+</div>

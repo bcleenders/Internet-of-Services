@@ -5,8 +5,13 @@ exports.up = function(knex) {
     table.increments('id').primary();
     table.string('name');
     table.string('semester');
+    table.string('description');
     table.integer('year');
+    table.dateTime('enrollment_deadline');
+    table.integer('isis_id').unique();
+    table.boolean('visible').defaultsTo(false);
     table.timestamps();
+    table.json('preferences');
   });
 };
 
