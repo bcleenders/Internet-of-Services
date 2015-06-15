@@ -15,65 +15,36 @@
     <hr>
 
     <form action="/course/{{course.id}}/enroll" method="POST">
-        <h5>Preferences</h5>
-
-        {{#if course.preferences.preferences}}
+        {{#if skills}}
             <div class="row">
-                You can choose your top 3 favorite groups:
+                <h5>Skills</h5>
+                <p>Please rank yourself on the following topics, 1 having no experience and 10 being very experienced.</p>
             </div>
-            <div class="row">
-                <div class="four columns">
-                    <label for="first">Favorite</label>
-                    <select class="u-full-width" id="first">
-                        {{#each course.groups}}
-                        <option value="{{id}}">{{name}}</option>
-                        {{/each}}
-                    </select>
+            {{#each course.skills}}
+                <div class="row">
+                    <div class="three columns">
+                        <label for="skills[{{this}}]">{{this}}</label>
+                    </div>
+                    <div class="three columns">
+                        <input type="number" id="skills[{{this}}]" class="skills" name="skills[{{this}}]">
+                    </div>
                 </div>
-                <div class="four columns">
-                    <label for="second">Second choice</label>
-                    <select class="u-full-width" id="second">
-                        {{#each course.groups}}
-                        <option value="{{id}}">{{name}}</option>
-                        {{/each}}
-                    </select>
-                </div>
-                <div class="four columns">
-                    <label for="third">Third choice</label>
-                    <select class="u-full-width" id="third">
-                        {{#each course.groups}}
-                        <option value="{{id}}">{{name}}</option>
-                        {{/each}}
-                    </select>
-                </div>
-            </div>
-        {{/if}}
-
-        {{#if course.preferences.friends}}
-            <div class="row">
-                <p>
-                    If there is anyone you would like to work with, you can select them from this list.<br />
-                    Anyone missing? This list only shows students enrolled in this course. If your friends are missing from the list, you can check back later, add them and update your preferences.
-                </p>
-            </div>
-            <div class="row">
-                <div class="six columns">
-                    <select id="friends" name="friends" style="width: 100%" multiple>
-                        {{#each course.students}}
-                        <option value="student[{{id}}]">{{name}}</option>
-                        {{/each}}
-                    </select>
-                    <script language="JavaScript">
-                        $("#friends").chosen({
-                            disable_search_threshold: 10,
-                            no_results_text: "That person isn't on the list (yet)"
-                        });
-                    </script>
-                </div>
-            </div>
+            {{/each}}
+            <script language="JavaScript">
+                $('.skills').change(function(el, b) {
+                    var val = $(this).val();
+                    if(val < 1) {
+                        $(this).val(1);
+                    }
+                    if(val > 10) {
+                        $(this).val(10);
+                    }
+                });
+            </script>
         {{/if}}
 
         {{#if course.preferences.compulsory}}
+            <h5>Your study</h5>
             <div class="row">
                 <div class="six columns">
                     <label for="compulsory">Is this course part of your compulsory curriculum?</label>
@@ -89,6 +60,114 @@
                             $('#semester').val('NO');
                         }
                     </script>
+                </div>
+            </div>
+        {{/if}}
+
+        {{#if course.preferences.preferences}}
+            <h5>Preferred topics</h5>
+            <div class="row">
+                Please select the order of preference of the topics.
+            </div>
+            {{#each course.groups}}
+                <div class="row">
+                    <div class="three columns">
+                        <label for="preferences[{{@index}}]" id="prefLab_{{@index}}"></label>
+                    </div>
+                    <div class="three columns">
+                        <select class="u-full-width skill" id="preferences[{{@index}}]" name="preferences[{{@index}}]">
+                            {{#each ../course.groups}}
+                                <option value="{{@index}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+            {{/each}}
+            <div class="row" id="pref_warning">
+                <div class="twelve columns">
+                    <p>Please select each group exactly once.</p>
+                </div>
+            </div>
+            <script language="JavaScript">
+                /*
+                Set the labels
+                 */
+                var numGroups = {{course.groups.length}};
+                var getOrdinal = function(n) {
+                    var s=["th","st","nd","rd"],
+                            v=n%100;
+                    return n+(s[(v-20)%10]||s[v]||s[0]);
+                };
+
+                for(var i = 0; i < numGroups; i++) {
+                    var descr;
+                    if(i == 0) {
+                        descr = 'Favorite topic';
+                    } else if(i == numGroups - 1) {
+                        descr = 'Least favorite topic';
+                    } else {
+                        descr = getOrdinal(i + 1) + ' most favorite';
+                    }
+                    $('#prefLab_' + i).html(descr);
+                }
+
+                /*
+                Set a warning if the user selected a group more than once
+                 */
+                $('.skill').change(function(e) {
+                    var hasDoubles = false;
+
+                    // Check which skills are selected
+                    var skills = [];
+                    for(var i = 0; (! hasDoubles) && i < $('.skill').length; i++) {
+                        var val = $($('.skill')[i]).val();
+
+                        // Set hasDoubles to true if this skill is already in the list
+                        hasDoubles = (-1 < skills.indexOf(val));
+
+                        // Add this skill to the list
+                        skills[i] = val;
+                    }
+                    if(hasDoubles) {
+                        $('#pref_warning').show();
+                    } else {
+                        $('#pref_warning').hide();
+                    }
+                });
+            </script>
+        {{/if}}
+
+        {{#if course.preferences.friends}}
+            <h5>Preferred partners</h5>
+
+            <div class="row">
+                <div class="twelve columns">
+                    <p>
+                        If there is anyone you would like to work with, you can select them from this list to increase your chances of sharing a group.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="six columns">
+                    <select id="friends" name="friends" style="width: 100%" multiple>
+                        {{#each course.students}}
+                            <option value="student[{{id}}]">{{name}}</option>
+                        {{/each}}
+                    </select>
+                    <script language="JavaScript">
+                        $("#friends").chosen({
+                            disable_search_threshold: 10,
+                            no_results_text: "That person isn't on the list (yet)\<br \/\>Maybe you can check again later!",
+                            placeholder_text_multiple: "Please select your preferred partners"
+                        });
+                    </script>
+                </div>
+            </div>
+            <div class="row">
+                <div class="twelve columns">
+                    <p>
+                        Anyone missing? This list only shows students enrolled in this course. If your friends are missing from the list, you can check back later and add them.
+                    </p>
                 </div>
             </div>
         {{/if}}

@@ -97,6 +97,12 @@ var handle = function (req, reply) {
                         };
                     }
 
+                    fakeCourse.skills = [
+                        'Time travel',
+                        'Unicorn breeding',
+                        'Rainbow puking'
+                    ];
+
                     fakeCourse.groups = [
                         {
                             name: 'Test group 1',
@@ -106,7 +112,13 @@ var handle = function (req, reply) {
                         },
                         {
                             name: 'Test group 2',
-                            description: 'barrrrrr descr',
+                            description: 'asdflkjasdf asdf asdf asdf asdf asdf awe qwrj  asdfl;kj ;lajsdf adsf;lkj asdf;lkj asdf;lkj\nasdfl;kj asdf;lkjasdf;ljkasdf asdf;lkjasdfl;kj\n;lajsdf;lkjasdf;lkj',
+                            minsize: 2,
+                            maxsize: 10
+                        },
+                        {
+                            name: 'Test group 3',
+                            description: 'barrrrrr\ndescr\nasdf\nasf\n\n\nasdfl;kjasdf;lkjasdfl;j',
                             minsize: 20,
                             maxsize: 100
                         }
@@ -115,6 +127,7 @@ var handle = function (req, reply) {
                     // Deadline has not passed yet -> allow students to change their preferences.
                     reply.view('student_enrollment_form', {
                         course: fakeCourse,
+                        skills: true,
                         enrollment_deadline: dateToString(enrollment_deadline),
                         debuginfo: {
                             payload: JSON.stringify(req.payload, null, 4)
