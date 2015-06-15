@@ -77,9 +77,44 @@ var handle = function (req, reply) {
                         groups: course.groups()
                     })
                 } else {
+                    var fakeCourse = course.toJSON();
+
+                    fakeCourse.preferences = {
+                        preferences: true,
+                        friends: true,
+                        diverse: true,
+                        compulsory: true
+                    };
+
+                    fakeCourse.students = [];
+
+                    fnames = ['Bram', 'Juan', 'Marc', 'Kees', 'Sjaak', 'Bernard'];
+                    lnames = ['de Vries', 'Jansen', 'de Boer', 'Teunissen', 'van Rooij', 'van Wassenaar', 'de Keijzer'];
+                    for(var i = 0; i < 40; i++) {
+                        fakeCourse.students[i] = {
+                            id: i,
+                            name: fnames[i % fnames.length] + ' ' + lnames[i%lnames.length]
+                        };
+                    }
+
+                    fakeCourse.groups = [
+                        {
+                            name: 'Test group 1',
+                            description: 'foo descr',
+                            minsize: 2,
+                            maxsize: 10
+                        },
+                        {
+                            name: 'Test group 2',
+                            description: 'barrrrrr descr',
+                            minsize: 20,
+                            maxsize: 100
+                        }
+                    ];
+
                     // Deadline has not passed yet -> allow students to change their preferences.
                     reply.view('student_enrollment_form', {
-                        course: course.toJSON(),
+                        course: fakeCourse,
                         enrollment_deadline: dateToString(enrollment_deadline),
                         debuginfo: {
                             payload: JSON.stringify(req.payload, null, 4)
